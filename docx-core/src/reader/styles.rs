@@ -39,6 +39,7 @@ impl FromXML for Styles {
                         break;
                     }
                 }
+                Ok(XmlEvent::EndDocument) => return Err(ReaderError::XMLReadError),
                 Err(_) => return Err(ReaderError::XMLReadError),
                 _ => {}
             }

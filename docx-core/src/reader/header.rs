@@ -10,6 +10,7 @@ impl FromXML for Header {
     fn from_xml<R: Read>(reader: R) -> Result<Self, ReaderError> {
         let mut parser = EventReader::new(reader);
         let mut header = Self::default();
+        panic!("test");
         loop {
             let e = parser.next();
             match e {

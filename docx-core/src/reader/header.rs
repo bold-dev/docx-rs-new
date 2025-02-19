@@ -38,6 +38,8 @@ impl FromXML for Header {
                             continue;
                         }
                         XMLElement::Textpath => {
+                            println!("textpath");
+                            println!("attributes: {:?}", attributes);
                             let watermark = attributes
                                 .iter()
                                 .find(|attr| attr.name.local_name == "string")

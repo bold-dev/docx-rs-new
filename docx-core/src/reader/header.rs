@@ -36,6 +36,17 @@ impl FromXML for Header {
                             }
                             continue;
                         }
+                        XMLElement::Textpath => {
+                            let watermark = attributes
+                                .iter()
+                                .find(|attr| attr.name.local_name == "string")
+                                .and_then(|attr| Some(attr.value.clone()));
+
+                            if let Some(watermark) = watermark {
+                                dbg!(watermark);
+                            }
+                            continue;
+                        }
                         _ => {}
                     }
                 }

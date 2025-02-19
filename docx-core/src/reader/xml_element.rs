@@ -175,6 +175,7 @@ pub enum XMLElement {
     XAlign,
     Y,
     YAlign,
+    Textpath,
     Unsupported,
 }
 
@@ -425,6 +426,7 @@ impl FromStr for XMLElement {
             "y" => Ok(XMLElement::Y),
             "yAlign" => Ok(XMLElement::YAlign),
             "type" => Ok(XMLElement::Type),
+            "textpath" => Ok(XMLElement::Textpath),
             _ => Ok(XMLElement::Unsupported),
         }
     }

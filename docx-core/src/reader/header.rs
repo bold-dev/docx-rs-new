@@ -17,7 +17,10 @@ impl FromXML for Header {
                     attributes, name, ..
                 }) => {
                     let e = XMLElement::from_str(&name.local_name).unwrap();
-                    println!("name: {}, e: {:?}", name.local_name, e);
+                    println!(
+                        "name: {}, e: {:?}, orig_e: {}",
+                        name.local_name, e, &name.local_name
+                    );
                     match e {
                         XMLElement::Paragraph => {
                             if let Ok(p) = Paragraph::read(&mut parser, &attributes) {

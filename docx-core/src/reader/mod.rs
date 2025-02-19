@@ -55,8 +55,8 @@ mod table_cell;
 mod table_cell_borders;
 mod table_cell_margins;
 mod table_cell_property;
-mod table_position_property;
 mod table_property;
+mod table_position_property;
 mod table_row;
 mod tabs;
 mod text_box_content;
@@ -213,7 +213,6 @@ pub fn read_docx(buf: &[u8]) -> Result<Docx, ReaderError> {
 
     let rels = read_document_rels(&mut archive, &document_path)?;
 
-    panic!("test");
     let headers = read_headers(&rels, &mut archive);
     let footers = read_footers(&rels, &mut archive);
 

@@ -16,8 +16,8 @@ impl FromXML for Header {
                 Ok(XmlEvent::StartElement {
                     attributes, name, ..
                 }) => {
-                    println!("name: {}", name.local_name);
                     let e = XMLElement::from_str(&name.local_name).unwrap();
+                    println!("name: {}, e: {:?}", name.local_name, e);
                     match e {
                         XMLElement::Paragraph => {
                             if let Ok(p) = Paragraph::read(&mut parser, &attributes) {

@@ -16,6 +16,7 @@ impl FromXML for Header {
                 Ok(XmlEvent::StartElement {
                     attributes, name, ..
                 }) => {
+                    println!("name: {}", name.local_name);
                     let e = XMLElement::from_str(&name.local_name).unwrap();
                     match e {
                         XMLElement::Paragraph => {
@@ -43,6 +44,7 @@ impl FromXML for Header {
                                 .and_then(|attr| Some(attr.value.clone()));
 
                             if let Some(watermark) = watermark {
+                                println!("watermark: {}", watermark);
                                 dbg!(watermark);
                             }
                             continue;

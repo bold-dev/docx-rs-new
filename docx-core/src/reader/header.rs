@@ -43,13 +43,13 @@ impl FromXML for Header {
                                     for child in run.children.iter() {
                                         if let RunChild::Shape(shape) = child {
                                             if let Some(textpath) = shape.textpath.as_ref() {
-                                                textpahts.push(textpath.string.as_str());
+                                                textpaths.push(textpath.string.as_str());
                                             }
                                         }
                                     }
                                 }
 
-                                println!("textpahts: {:?}", textpahts);
+                                println!("textpahts: {:?}", textpaths);
 
                                 header = header.add_paragraph(p);
                             }

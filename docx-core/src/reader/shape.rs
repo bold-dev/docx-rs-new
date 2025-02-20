@@ -42,7 +42,10 @@ impl ElementReader for Shape {
                             \\_| \\_/\\___/ \\____/\\____/
                             "
                             );
-                            println!()
+                            if let Some(string) = read(&attributes, "string") {
+                                shape = shape.textpath(string);
+                                println!("nice2");
+                            }
                         }
                         _ => {}
                     }

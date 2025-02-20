@@ -22,6 +22,10 @@ pub struct ImageData {
     pub id: String,
 }
 
+#[derive(Serialize, Debug, Clone, PartialEq, Default)]
+#[cfg_attr(feature = "wasm", derive(ts_rs::TS))]
+#[cfg_attr(feature = "wasm", ts(export))]
+#[serde(rename_all = "camelCase")]
 pub struct Textpath {
     pub string: String,
 }

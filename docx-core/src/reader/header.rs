@@ -25,8 +25,8 @@ impl FromXML for Header {
                     match e {
                         XMLElement::Paragraph => {
                             if let Ok(p) = Paragraph::read(&mut parser, &attributes) {
-                                header = header.add_paragraph(p);
                                 println!("childerns: {:?}", p.children());
+                                header = header.add_paragraph(p);
                             }
                             continue;
                         }

@@ -26,22 +26,30 @@ impl FromXML for Header {
                         XMLElement::Paragraph => {
                             if let Ok(p) = Paragraph::read(&mut parser, &attributes) {
                                 println!("childerns: {:?}", p.children());
-                                let watermark = p.children().iter().filter_map(|paragraph_child| {
-                                    match paragraph_child {
-                                        ParagraphChild::Run(run) => run
-                                            .children
-                                            .iter()
-                                            .filter_map(|run_child| match run_child {
-                                                RunChild::Shape(shape) => shape.textpath.as_ref(),
-                                                _ => None,
-                                            })
-                                            .collect(),
-                                        _ => None,
+                                let runs: Vec<&Box<Run>> = p
+                                    .children()
+                                    .iter()
+                                    .filter_map(|paragraph_child| {
+                                        if let ParagraphChild::Run(run) = paragraph_child {
+                                            Some(run)
+                                        } else {
+                                            None
+                                        }
+                                    })
+                                    .collect();
+
+                                // for each run, collect of it's shape children
+                                let mut textpahts = vec![];
+                                for run in runs {
+                                    for child in run.children.iter() {
+                                        if let RunChild::Shape(shape) = child {
+                                            textpahts.push(shape.textpath.clone());
+                                        }
                                     }
-                                });
-                                if let Some(watermark) = watermark {
-                                    println!("watermark: {:?}", watermark);
                                 }
+
+                                println!("textpahts: {:?}", textpahts);
+
                                 header = header.add_paragraph(p);
                             }
                             continue;

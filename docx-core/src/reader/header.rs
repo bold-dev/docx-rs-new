@@ -26,6 +26,7 @@ impl FromXML for Header {
                         XMLElement::Paragraph => {
                             if let Ok(p) = Paragraph::read(&mut parser, &attributes) {
                                 header = header.add_paragraph(p);
+                                println!("childerns: {:?}", p.children());
                             }
                             continue;
                         }

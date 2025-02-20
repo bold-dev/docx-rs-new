@@ -9,8 +9,6 @@ pub struct Shape {
     pub style: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_data: Option<ImageData>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub string: Option<String>,
 }
 // Experimental, For now reader only.
 

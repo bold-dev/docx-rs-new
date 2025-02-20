@@ -24,10 +24,27 @@ impl ElementReader for Shape {
                 Ok(XmlEvent::StartElement {
                     name, attributes, ..
                 }) => {
-                    if let Ok(VXMLElement::ImageData) = VXMLElement::from_str(&name.local_name) {
-                        if let Some(id) = read(&attributes, "id") {
-                            shape = shape.image_data(id);
+                    let e = VXMLElement::from_str(&name.local_name);
+                    match e {
+                        Ok(VXMLElement::ImageData) => {
+                            if let Some(id) = read(&attributes, "id") {
+                                shape = shape.image_data(id);
+                            }
                         }
+                        Ok(VXMLElement::Textpath) => {
+                            println!(
+                                "
+                             _   _ _____ _____ _____ 
+                            | \\ | |_   _/  __ \\  ___|
+                            |  \\| | | | | /  \\/ |__  
+                            | . ` | | | | |   |  __| 
+                            | |\\  |_| |_| \\__/\\ |___ 
+                            \\_| \\_/\\___/ \\____/\\____/
+                            "
+                            );
+                            println!()
+                        }
+                        _ => {}
                     }
                 }
                 Ok(XmlEvent::EndElement { name, .. }) => {

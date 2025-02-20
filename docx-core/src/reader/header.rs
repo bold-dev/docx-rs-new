@@ -25,7 +25,6 @@ impl FromXML for Header {
                     match e {
                         XMLElement::Paragraph => {
                             if let Ok(p) = Paragraph::read(&mut parser, &attributes) {
-                                println!("childerns: {:?}", p.children());
                                 let runs: Vec<&Box<Run>> = p
                                     .children()
                                     .iter()
@@ -43,7 +42,9 @@ impl FromXML for Header {
                                 for run in runs {
                                     for child in run.children.iter() {
                                         if let RunChild::Shape(shape) = child {
-                                            textpahts.push(shape.textpath.clone());
+                                            if let Some(textpath) = shape.textpath.as_ref() {
+                                                textpahts.push(textpath.string.as_str());
+                                            }
                                         }
                                     }
                                 }

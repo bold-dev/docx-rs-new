@@ -16,6 +16,7 @@ impl FromXML for Header {
                 Ok(XmlEvent::StartElement {
                     attributes, name, ..
                 }) => {
+                    let dbg_e = e.clone().unwrap();
                     let e = XMLElement::from_str(&name.local_name).unwrap();
                     println!(
                         "name: {}, e: {:?}, orig_e: {}",
@@ -26,6 +27,8 @@ impl FromXML for Header {
                             if let Ok(p) = Paragraph::read(&mut parser, &attributes) {
                                 header = header.add_paragraph(p);
                             }
+                            println!("dbg_e: {:?}", dbg_e);
+
                             continue;
                         }
                         XMLElement::Table => {

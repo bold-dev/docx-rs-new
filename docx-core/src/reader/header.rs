@@ -26,12 +26,22 @@ impl FromXML for Header {
                         XMLElement::Paragraph => {
                             if let Ok(p) = Paragraph::read(&mut parser, &attributes) {
                                 println!("childerns: {:?}", p.children());
-                                let watermark = p.children().iter().find(|paragraph_child| {
-                                    if let RunChild::Shape(shape) = paragraph_child {
-                                        shape.textpath.is_some()
-                                    }
-                                    false
-                                });
+                                let watermark =
+                                    p.children().iter().find(
+                                        |paragraph_child| match paragraph_child {
+                                            ParagraphChild::Run(run) => {
+                                                run.children().iter().find(|run_child| {
+                                                    match run_child {
+                                                        RunChild::Text(text) => {
+                                                            text.text.contains("watermark")
+                                                        }
+                                                        _ => false,
+                                                    }
+                                                })
+                                            }
+                                            _ => false,
+                                        },
+                                    );
                                 if let Some(watermark) = watermark {
                                     println!("watermark: {}", watermark);
                                 }

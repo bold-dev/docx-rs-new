@@ -26,20 +26,19 @@ impl FromXML for Header {
                         XMLElement::Paragraph => {
                             if let Ok(p) = Paragraph::read(&mut parser, &attributes) {
                                 println!("childerns: {:?}", p.children());
-                                let watermark =
-                                    p.children().iter().find(
-                                        |paragraph_child| match paragraph_child {
-                                            ParagraphChild::Run(run) => run.children.iter().find(
-                                                |run_child| match run_child {
-                                                    RunChild::Text(text) => {
-                                                        text.text.contains("watermark")
-                                                    }
-                                                    _ => false,
-                                                },
-                                            ),
-                                            _ => false,
-                                        },
-                                    );
+                                p.children().iter().filter_map(|paragraph_child| {
+                                    match paragraph_child {
+                                        ParagraphChild::Run(run) => run
+                                            .children
+                                            .iter()
+                                            .filter_map(|run_child| match run_child {
+                                                RunChild::Shape(shape) => shape.textpath.as_ref(),
+                                                _ => None,
+                                            })
+                                            .collect(),
+                                        _ => None,
+                                    }
+                                });
                                 if let Some(watermark) = watermark {
                                     println!("watermark: {:?}", watermark);
                                 }

@@ -28,10 +28,7 @@ impl FromXML for Header {
                                 println!("childerns: {:?}", p.children());
                                 let watermark = p.children().iter().find(|paragraph_child| {
                                     if let RunChild::Shape(shape) = paragraph_child {
-                                        if let Some(textpath) = shape.textpath {
-                                            println!("textpath: {:?}", textpath.string);
-                                            return Some(textpath.string);
-                                        }
+                                        shape.textpath
                                     }
                                     None
                                 });

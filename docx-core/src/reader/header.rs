@@ -12,11 +12,11 @@ impl FromXML for Header {
         let mut header = Self::default();
         loop {
             let e = parser.next();
+            let dbg_e = e.clone().unwrap();
             match e {
                 Ok(XmlEvent::StartElement {
                     attributes, name, ..
                 }) => {
-                    let dbg_e = e.clone().unwrap();
                     let e = XMLElement::from_str(&name.local_name).unwrap();
                     println!(
                         "name: {}, e: {:?}, orig_e: {}",

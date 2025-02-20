@@ -27,8 +27,6 @@ impl FromXML for Header {
                             if let Ok(p) = Paragraph::read(&mut parser, &attributes) {
                                 header = header.add_paragraph(p);
                             }
-                            println!("dbg_e: {:?}", dbg_e);
-
                             continue;
                         }
                         XMLElement::Table => {

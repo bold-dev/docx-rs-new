@@ -27,6 +27,7 @@ impl ElementReader for Paragraph {
 
                     match e {
                         XMLElement::Run => {
+                            println!("run");
                             let run = Run::read(r, &attributes)?;
                             p = p.add_run(run);
                             continue;

@@ -121,7 +121,10 @@ fn read_headers(
         .into_iter()
         .filter_map(|(rid, path, ..)| {
             let data = read_zip(archive, path.to_str().expect("should have header path."));
-            println!("path: {}", path.to_str().expect("should have header path."));
+            println!(
+                "\n***************** path: {}*****************\n",
+                path.to_str().expect("should have header path.")
+            );
             if let Ok(d) = data {
                 if let Ok(h) = Header::from_xml(&d[..]) {
                     let rels = read_header_or_footer_rels(archive, path).unwrap_or_default();

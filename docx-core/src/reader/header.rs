@@ -26,6 +26,13 @@ impl FromXML for Header {
                         XMLElement::Paragraph => {
                             if let Ok(p) = Paragraph::read(&mut parser, &attributes) {
                                 println!("childerns: {:?}", p.children());
+                                p.children().iter().find(|paragraph_child| {
+                                    if let RunChild::Shape(shape) = paragraph_child {
+                                        if let Some(textpath) = shape.textpath {
+                                            println!("textpath: {:?}", textpath.string);
+                                        }
+                                    }
+                                });
                                 header = header.add_paragraph(p);
                             }
                             continue;

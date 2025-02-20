@@ -135,7 +135,6 @@ impl ElementReader for Run {
                             }
                         }
                         Some("v") => {
-                            println!("v: {}", &name.local_name);
                             let e = VXMLElement::from_str(&name.local_name).unwrap();
                             match e {
                                 // Experimental For now support only imageData in shape

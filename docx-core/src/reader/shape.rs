@@ -32,19 +32,8 @@ impl ElementReader for Shape {
                             }
                         }
                         Ok(VXMLElement::Textpath) => {
-                            println!(
-                                "
-                             _   _ _____ _____ _____ 
-                            | \\ | |_   _/  __ \\  ___|
-                            |  \\| | | | | /  \\/ |__  
-                            | . ` | | | | |   |  __| 
-                            | |\\  |_| |_| \\__/\\ |___ 
-                            \\_| \\_/\\___/ \\____/\\____/
-                            "
-                            );
                             if let Some(string) = read(&attributes, "string") {
                                 shape = shape.textpath(string);
-                                println!("nice2");
                             }
                         }
                         _ => {}

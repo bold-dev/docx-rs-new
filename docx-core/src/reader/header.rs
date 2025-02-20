@@ -26,7 +26,7 @@ impl FromXML for Header {
                         XMLElement::Paragraph => {
                             if let Ok(p) = Paragraph::read(&mut parser, &attributes) {
                                 println!("childerns: {:?}", p.children());
-                                p.children().iter().filter_map(|paragraph_child| {
+                                let watermark = p.children().iter().filter_map(|paragraph_child| {
                                     match paragraph_child {
                                         ParagraphChild::Run(run) => run
                                             .children

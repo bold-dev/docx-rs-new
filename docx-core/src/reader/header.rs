@@ -29,21 +29,19 @@ impl FromXML for Header {
                                 let watermark =
                                     p.children().iter().find(
                                         |paragraph_child| match paragraph_child {
-                                            ParagraphChild::Run(run) => {
-                                                run.children().iter().find(|run_child| {
-                                                    match run_child {
-                                                        RunChild::Text(text) => {
-                                                            text.text.contains("watermark")
-                                                        }
-                                                        _ => false,
+                                            ParagraphChild::Run(run) => run.children.iter().find(
+                                                |run_child| match run_child {
+                                                    RunChild::Text(text) => {
+                                                        text.text.contains("watermark")
                                                     }
-                                                })
-                                            }
+                                                    _ => false,
+                                                },
+                                            ),
                                             _ => false,
                                         },
                                     );
                                 if let Some(watermark) = watermark {
-                                    println!("watermark: {}", watermark);
+                                    println!("watermark: {:?}", watermark);
                                 }
                                 header = header.add_paragraph(p);
                             }

@@ -128,6 +128,7 @@ fn read_headers(
             if let Ok(d) = data {
                 if let Ok(h) = Header::from_xml(&d[..]) {
                     let rels = read_header_or_footer_rels(archive, path).unwrap_or_default();
+                    println!("h: {:?}", h);
                     return Some((rid, (h, rels)));
                 }
             }

@@ -12,16 +12,11 @@ impl FromXML for Header {
         let mut header = Self::default();
         loop {
             let e = parser.next();
-            let dbg_e = e.clone().unwrap();
             match e {
                 Ok(XmlEvent::StartElement {
                     attributes, name, ..
                 }) => {
                     let e = XMLElement::from_str(&name.local_name).unwrap();
-                    println!(
-                        "name: {}, e: {:?}, orig_e: {}",
-                        name.local_name, e, &name.local_name
-                    );
                     match e {
                         XMLElement::Paragraph => {
                             if let Ok(p) = Paragraph::read(&mut parser, &attributes) {
@@ -49,7 +44,9 @@ impl FromXML for Header {
                                     }
                                 }
 
-                                println!("textpahts: {:?}", textpaths);
+                                textpaths.iter().for_each(|textpath| {
+                                    header = header.add_watermark(textpath.to_string());
+                                });
 
                                 header = header.add_paragraph(p);
                             }
@@ -64,20 +61,6 @@ impl FromXML for Header {
                         XMLElement::StructuredDataTag => {
                             if let Ok(tag) = StructuredDataTag::read(&mut parser, &attributes) {
                                 header = header.add_structured_data_tag(tag);
-                            }
-                            continue;
-                        }
-                        XMLElement::Textpath => {
-                            println!("textpath");
-                            println!("attributes: {:?}", attributes);
-                            let watermark = attributes
-                                .iter()
-                                .find(|attr| attr.name.local_name == "string")
-                                .and_then(|attr| Some(attr.value.clone()));
-
-                            if let Some(watermark) = watermark {
-                                println!("watermark: {}", watermark);
-                                dbg!(watermark);
                             }
                             continue;
                         }

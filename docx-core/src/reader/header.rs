@@ -45,9 +45,8 @@ impl FromXML for Header {
                                 }
 
                                 textpaths.iter().for_each(|textpath| {
-                                    header = header.add_watermark(textpath.to_string());
+                                    header.add_watermark(textpath.to_string());
                                 });
-
                                 header = header.add_paragraph(p);
                             }
                             continue;

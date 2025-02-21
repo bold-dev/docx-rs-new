@@ -48,9 +48,8 @@ impl Header {
         self
     }
 
-    pub(crate) fn add_watermark(mut self, watermark: String) -> Self {
+    pub(crate) fn add_watermark(&mut self, watermark: String) {
         self.children.push(HeaderChild::Watermark(watermark));
-        self
     }
 }
 

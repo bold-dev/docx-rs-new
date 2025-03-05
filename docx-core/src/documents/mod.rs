@@ -926,6 +926,7 @@ impl Docx {
                         );
                     }
                     HeaderChild::PageNum(_) => {}
+                    HeaderChild::Watermark(_) => {}
                     HeaderChild::StructuredDataTag(tag) => {
                         for child in tag.children.iter_mut() {
                             if let StructuredDataTagChild::Paragraph(paragraph) = child {
@@ -992,6 +993,7 @@ impl Docx {
                             }
                         }
                     }
+                    HeaderChild::Watermark(_) => {}
                 }
             }
             header_images[1] = images;
@@ -1018,6 +1020,7 @@ impl Docx {
                         );
                     }
                     HeaderChild::PageNum(_) => {}
+                    HeaderChild::Watermark(_) => {}
                     HeaderChild::StructuredDataTag(tag) => {
                         for child in tag.children.iter_mut() {
                             if let StructuredDataTagChild::Paragraph(paragraph) = child {

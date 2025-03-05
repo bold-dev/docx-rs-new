@@ -9,6 +9,8 @@ pub struct Shape {
     pub style: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_data: Option<ImageData>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub textpath: Option<Textpath>,
 }
 // Experimental, For now reader only.
 
@@ -18,6 +20,14 @@ pub struct Shape {
 #[serde(rename_all = "camelCase")]
 pub struct ImageData {
     pub id: String,
+}
+
+#[derive(Serialize, Debug, Clone, PartialEq, Default)]
+#[cfg_attr(feature = "wasm", derive(ts_rs::TS))]
+#[cfg_attr(feature = "wasm", ts(export))]
+#[serde(rename_all = "camelCase")]
+pub struct Textpath {
+    pub string: String,
 }
 
 impl Shape {
@@ -32,6 +42,13 @@ impl Shape {
 
     pub fn image_data(mut self, id: impl Into<String>) -> Self {
         self.image_data = Some(ImageData { id: id.into() });
+        self
+    }
+
+    pub fn textpath(mut self, string: impl Into<String>) -> Self {
+        self.textpath = Some(Textpath {
+            string: string.into(),
+        });
         self
     }
 }

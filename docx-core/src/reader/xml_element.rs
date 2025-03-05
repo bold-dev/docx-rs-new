@@ -175,6 +175,7 @@ pub enum XMLElement {
     XAlign,
     Y,
     YAlign,
+    Textpath,
     Unsupported,
 }
 
@@ -241,6 +242,7 @@ pub enum VXMLElement {
     TextBox,
     Shape,
     ImageData,
+    Textpath,
     Unsupported,
 }
 
@@ -425,6 +427,7 @@ impl FromStr for XMLElement {
             "y" => Ok(XMLElement::Y),
             "yAlign" => Ok(XMLElement::YAlign),
             "type" => Ok(XMLElement::Type),
+            "textpath" => Ok(XMLElement::Textpath),
             _ => Ok(XMLElement::Unsupported),
         }
     }
@@ -511,6 +514,7 @@ impl FromStr for VXMLElement {
             "textbox" => Ok(VXMLElement::TextBox),
             "shape" => Ok(VXMLElement::Shape),
             "imagedata" => Ok(VXMLElement::ImageData),
+            "textpath" => Ok(VXMLElement::Textpath),
             _ => Ok(VXMLElement::Unsupported),
         }
     }

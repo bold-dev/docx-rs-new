@@ -20,6 +20,32 @@ impl FromXML for Header {
                     match e {
                         XMLElement::Paragraph => {
                             if let Ok(p) = Paragraph::read(&mut parser, &attributes) {
+                                let runs: Vec<&Box<Run>> = p
+                                    .children()
+                                    .iter()
+                                    .filter_map(|paragraph_child| {
+                                        if let ParagraphChild::Run(run) = paragraph_child {
+                                            Some(run)
+                                        } else {
+                                            None
+                                        }
+                                    })
+                                    .collect();
+
+                                let mut textpaths = vec![];
+                                for run in runs {
+                                    for child in run.children.iter() {
+                                        if let RunChild::Shape(shape) = child {
+                                            if let Some(textpath) = shape.textpath.as_ref() {
+                                                textpaths.push(textpath.string.as_str());
+                                            }
+                                        }
+                                    }
+                                }
+
+                                textpaths.iter().for_each(|textpath| {
+                                    header.add_watermark(textpath.to_string());
+                                });
                                 header = header.add_paragraph(p);
                             }
                             continue;

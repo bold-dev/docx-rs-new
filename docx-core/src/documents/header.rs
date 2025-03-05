@@ -47,6 +47,10 @@ impl Header {
             .push(HeaderChild::StructuredDataTag(Box::new(t)));
         self
     }
+
+    pub(crate) fn add_watermark(&mut self, watermark: String) {
+        self.children.push(HeaderChild::Watermark(watermark));
+    }
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -55,6 +59,7 @@ pub enum HeaderChild {
     Table(Box<Table>),
     PageNum(Box<PageNum>),
     StructuredDataTag(Box<StructuredDataTag>),
+    Watermark(String),
 }
 
 impl Serialize for HeaderChild {
@@ -87,7 +92,19 @@ impl Serialize for HeaderChild {
                 t.serialize_field("data", r)?;
                 t.end()
             }
+            HeaderChild::Watermark(ref w) => {
+                let mut t = serializer.serialize_struct("Watermark", 2)?;
+                t.serialize_field("type", "watermark")?;
+                t.serialize_field("data", w)?;
+                t.end()
+            }
         }
+    }
+}
+
+impl BuildXML for String {
+    fn build(&self) -> Vec<u8> {
+        self.as_bytes().to_vec()
     }
 }
 
@@ -102,6 +119,7 @@ impl BuildXML for Header {
                 HeaderChild::Table(t) => b = b.add_child(t),
                 HeaderChild::PageNum(p) => b = b.add_child(p),
                 HeaderChild::StructuredDataTag(t) => b = b.add_child(t),
+                HeaderChild::Watermark(w) => b = b.add_child(w),
             }
         }
         b.close().build()

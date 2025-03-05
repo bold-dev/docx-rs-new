@@ -32,7 +32,6 @@ impl FromXML for Header {
                                     })
                                     .collect();
 
-                                // for each run, collect of it's shape children
                                 let mut textpaths = vec![];
                                 for run in runs {
                                     for child in run.children.iter() {

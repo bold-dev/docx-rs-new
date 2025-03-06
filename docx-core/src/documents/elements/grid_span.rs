@@ -12,6 +12,10 @@ impl GridSpan {
     pub fn new(v: usize) -> GridSpan {
         GridSpan { val: v }
     }
+
+    pub fn get_val(&self) -> usize {
+        self.val
+    }
 }
 
 impl BuildXML for GridSpan {

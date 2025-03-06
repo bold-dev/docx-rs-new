@@ -121,6 +121,10 @@ impl TableCellProperty {
         }
         self
     }
+
+    pub fn get_grid_span(&self) -> Option<usize> {
+        self.grid_span.as_ref().map(|grid_span| grid_span.get_val())
+    }
 }
 
 impl BuildXML for TableCellProperty {

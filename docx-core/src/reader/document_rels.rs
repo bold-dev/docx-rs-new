@@ -24,10 +24,11 @@ impl ReadDocumentRels {
     }
 }
 
-pub fn read_document_rels(
-    archive: &mut zip::read::ZipArchive<Cursor<&[u8]>>,
+pub fn read_document_rels<T>(
+    archive: &mut zip::read::ZipArchive<T>,
     main_path: impl AsRef<Path>,
-) -> Result<ReadDocumentRels, ReaderError> {
+) -> Result<ReadDocumentRels, ReaderError>
+where T: std::io::Seek, T: std::io::Read{
     let dir = &main_path
         .as_ref()
         .parent()

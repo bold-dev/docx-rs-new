@@ -111,10 +111,11 @@ const HYPERLINK_TYPE: &str =
 const COMMENTS_EXTENDED_TYPE: &str =
     "http://schemas.microsoft.com/office/2011/relationships/commentsExtended";
 
-fn read_headers(
+fn read_headers<T>(
     rels: &ReadDocumentRels,
-    archive: &mut ZipArchive<Cursor<&[u8]>>,
-) -> HashMap<RId, (Header, ReadHeaderOrFooterRels)> {
+    archive: &mut ZipArchive<T>,
+) -> HashMap<RId, (Header, ReadHeaderOrFooterRels)>
+where T: std::io::Seek, T: std::io::Read {
     let header_paths = rels.find_target_path(HEADER_TYPE);
     let headers: HashMap<RId, (Header, ReadHeaderOrFooterRels)> = header_paths
         .unwrap_or_default()
@@ -133,10 +134,11 @@ fn read_headers(
     headers
 }
 
-fn read_footers(
+fn read_footers<T>(
     rels: &ReadDocumentRels,
-    archive: &mut ZipArchive<Cursor<&[u8]>>,
-) -> HashMap<RId, (Footer, ReadHeaderOrFooterRels)> {
+    archive: &mut ZipArchive<T>,
+) -> HashMap<RId, (Footer, ReadHeaderOrFooterRels)>
+where T: std::io::Seek, T: std::io::Read {
     let footer_paths = rels.find_target_path(FOOTER_TYPE);
     let footers: HashMap<RId, (Footer, ReadHeaderOrFooterRels)> = footer_paths
         .unwrap_or_default()
@@ -155,7 +157,8 @@ fn read_footers(
     footers
 }
 
-fn read_themes(rels: &ReadDocumentRels, archive: &mut ZipArchive<Cursor<&[u8]>>) -> Vec<Theme> {
+fn read_themes<T>(rels: &ReadDocumentRels, archive: &mut ZipArchive<T>) -> Vec<Theme>
+where T: std::io::Seek, T: std::io::Read {
     let theme_paths = rels.find_target_path(THEME_TYPE);
     theme_paths
         .unwrap_or_default()
@@ -173,9 +176,14 @@ fn read_themes(rels: &ReadDocumentRels, archive: &mut ZipArchive<Cursor<&[u8]>>)
 }
 
 pub fn read_docx(buf: &[u8]) -> Result<Docx, ReaderError> {
-    let mut docx = Docx::new();
     let cur = Cursor::new(buf);
-    let mut archive = zip::ZipArchive::new(cur)?;
+    let archive = zip::ZipArchive::new(cur)?;
+    read_docx_archive(archive)
+}
+
+pub fn read_docx_archive<T>(mut archive: ZipArchive<T>) -> Result<Docx, ReaderError>
+where T: std::io::Seek, T: std::io::Read {
+    let mut docx = Docx::new();
     // First, the content type for relationship parts and the Main Document part
     // (the only required part) must be defined (physically located at /[Content_Types].xml in the package)
     let _content_types = {
@@ -466,11 +474,12 @@ pub fn read_docx(buf: &[u8]) -> Result<Docx, ReaderError> {
     Ok(docx)
 }
 
-fn add_images(
+fn add_images<T>(
     mut docx: Docx,
     media: Option<Vec<(RId, PathBuf, Option<String>)>>,
-    archive: &mut ZipArchive<Cursor<&[u8]>>,
-) -> Docx {
+    archive: &mut ZipArchive<T>,
+) -> Docx
+where T: std::io::Seek, T: std::io::Read {
     // Read media
     if let Some(paths) = media {
         for (id, media, ..) in paths {

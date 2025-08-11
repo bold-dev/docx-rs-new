@@ -25,10 +25,11 @@ impl ReadHeaderOrFooterRels {
     }
 }
 
-pub fn read_header_or_footer_rels(
-    archive: &mut zip::read::ZipArchive<Cursor<&[u8]>>,
+pub fn read_header_or_footer_rels<T>(
+    archive: &mut zip::read::ZipArchive<T>,
     header_or_footer_path: impl AsRef<Path>,
-) -> Result<ReadHeaderOrFooterRels, ReaderError> {
+) -> Result<ReadHeaderOrFooterRels, ReaderError>
+where T: std::io::Seek, T: std::io::Read {
     let dir = &header_or_footer_path
         .as_ref()
         .parent()

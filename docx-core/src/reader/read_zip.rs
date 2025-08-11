@@ -2,10 +2,11 @@ use std::io::{Cursor, Read};
 
 use super::ReaderError;
 
-pub fn read_zip(
-    archive: &mut zip::read::ZipArchive<Cursor<&[u8]>>,
+pub fn read_zip<T>(
+    archive: &mut zip::read::ZipArchive<T>,
     name: &str,
-) -> Result<Vec<u8>, ReaderError> {
+) -> Result<Vec<u8>, ReaderError>
+where T: std::io::Seek, T: std::io::Read {
     let p = name.to_owned();
     // Archives zipped on Windows keep '\' in paths, replace them to avoid zip error.
     let mut p = str::replace(&p, "\\", "/");

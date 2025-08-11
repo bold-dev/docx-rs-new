@@ -1,6 +1,5 @@
 use std::collections::BTreeMap;
 use std::collections::HashSet;
-use std::io::Cursor;
 use std::path::*;
 
 use document_rels::rels::find_rels_filename;
@@ -28,7 +27,7 @@ pub fn read_document_rels<T>(
     archive: &mut zip::read::ZipArchive<T>,
     main_path: impl AsRef<Path>,
 ) -> Result<ReadDocumentRels, ReaderError>
-where T: std::io::Seek, T: std::io::Read{
+where T: std::io::Seek, T: std::io::Read {
     let dir = &main_path
         .as_ref()
         .parent()

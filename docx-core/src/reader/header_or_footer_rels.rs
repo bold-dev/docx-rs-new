@@ -1,6 +1,5 @@
 use std::collections::BTreeMap;
 use std::collections::HashSet;
-use std::io::Cursor;
 use std::path::*;
 
 use header_or_footer_rels::rels::find_rels_filename;

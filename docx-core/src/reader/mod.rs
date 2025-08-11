@@ -181,6 +181,11 @@ pub fn read_docx(buf: &[u8]) -> Result<Docx, ReaderError> {
     read_docx_archive(archive)
 }
 
+pub fn read_docx_file(file: std::fs::File) -> Result<Docx, ReaderError> {
+    let archive = zip::ZipArchive::new(file)?;
+    read_docx_archive(archive)
+}
+
 pub fn read_docx_archive<T>(mut archive: ZipArchive<T>) -> Result<Docx, ReaderError>
 where T: std::io::Seek, T: std::io::Read {
     let mut docx = Docx::new();

@@ -20,32 +20,9 @@ impl FromXML for Header {
                     match e {
                         XMLElement::Paragraph => {
                             if let Ok(p) = Paragraph::read(&mut parser, &attributes) {
-                                let runs: Vec<&Box<Run>> = p
-                                    .children()
-                                    .iter()
-                                    .filter_map(|paragraph_child| {
-                                        if let ParagraphChild::Run(run) = paragraph_child {
-                                            Some(run)
-                                        } else {
-                                            None
-                                        }
-                                    })
-                                    .collect();
-
-                                let mut textpaths = vec![];
-                                for run in runs {
-                                    for child in run.children.iter() {
-                                        if let RunChild::Shape(shape) = child {
-                                            if let Some(textpath) = shape.textpath.as_ref() {
-                                                textpaths.push(textpath.string.as_str());
-                                            }
-                                        }
-                                    }
+                                for watermark in paragraph_watermarks(&p) {
+                                    header.add_watermark(watermark);
                                 }
-
-                                textpaths.iter().for_each(|textpath| {
-                                    header.add_watermark(textpath.to_string());
-                                });
                                 header = header.add_paragraph(p);
                             }
                             continue;
@@ -58,6 +35,9 @@ impl FromXML for Header {
                         }
                         XMLElement::StructuredDataTag => {
                             if let Ok(tag) = StructuredDataTag::read(&mut parser, &attributes) {
+                                for watermark in structured_data_tag_watermarks(&tag) {
+                                    header.add_watermark(watermark);
+                                }
                                 header = header.add_structured_data_tag(tag);
                             }
                             continue;
@@ -72,6 +52,34 @@ impl FromXML for Header {
         }
         Ok(header)
     }
+}
+
+fn paragraph_watermarks(p: &Paragraph) -> Vec<String> {
+    p.children()
+        .iter()
+        .filter_map(|paragraph_child| match paragraph_child {
+            ParagraphChild::Run(run) => Some(run),
+            _ => None,
+        })
+        .flat_map(|run| run.children.iter())
+        .filter_map(|run_child| match run_child {
+            RunChild::Shape(shape) => shape.textpath.as_ref(),
+            _ => None,
+        })
+        .map(|textpath| textpath.string.clone())
+        .collect()
+}
+
+/// Word wraps a watermark picked from the Design > Watermark gallery in a content control.
+fn structured_data_tag_watermarks(tag: &StructuredDataTag) -> Vec<String> {
+    tag.children
+        .iter()
+        .flat_map(|child| match child {
+            StructuredDataTagChild::Paragraph(p) => paragraph_watermarks(p),
+            StructuredDataTagChild::StructuredDataTag(t) => structured_data_tag_watermarks(t),
+            _ => vec![],
+        })
+        .collect()
 }
 
 #[test]

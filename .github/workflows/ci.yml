@@ -9,7 +9,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '24.22.1'
       - uses: moonrepo/setup-rust@v1
         with:
           profile: minimal
@@ -62,15 +62,15 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '24.22.1'
       - uses: moonrepo/setup-rust@v1
         with:
           profile: minimal
           inherit-toolchain: true
       - run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
       - run: rustup target add wasm32-unknown-unknown
-      - run: npm install -g pnpm
-      - run: pnpm install && pnpm wasm-pack:node && pnpm wasm-pack:dev && tsc -p tsconfig.node.json && pnpm test
+      - run: npm install -g pnpm@10.33.0
+      - run: pnpm install && pnpm wasm-pack:node && pnpm wasm-pack:dev && pnpm exec tsc -p tsconfig.node.json && pnpm test
       - name: screenshot
         run: pnpm screenshot
       - uses: reg-viz/reg-actions@v2
